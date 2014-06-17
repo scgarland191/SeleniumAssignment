@@ -2,6 +2,9 @@
 logs
 *.log
 
+# Links to Sauce tests - don't commit this b/c it changes every test run
+SauceResults.xml
+
 # Runtime data
 pids
 *.pid
