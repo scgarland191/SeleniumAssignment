@@ -10,7 +10,7 @@ var wd = require('wd');
 exports.log = require('custom-logger').config({ level: 0 }); // TODO: Change to 2 for sauce
 exports.log.info().config({ color: 'green', format: '<logInfoMessage>type="%event%" message="%message% </logInfoMessage>' });
 
-exports.MaxWaitTime = 120000;
+exports.MaxWaitTime = 5000;
 
 ///////////////////////////////////////////////////////////////////////////
 // TODO: EDIT THIS DEPENDING ON WHERE YOU ARE RUNNING THE THING

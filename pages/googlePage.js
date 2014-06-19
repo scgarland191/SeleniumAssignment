@@ -65,4 +65,37 @@ GooglePage.prototype.getLinkText = function(el, done) {
     });
 }
 
+GooglePage.prototype.getFirstLinkAnchor = function(done) {
+    var self = this;
+    log.info("About to get first link anchor text");
+    
+    browser.waitForElementByCssSelector(firstResultSelector, function(err, el) {
+        if(err) {
+            done(err);
+        }
+        else {
+            // self.clickFirstLink(el, done);            
+            el.click(function(err) {
+                if(err) {
+                    done(err);
+                }
+                else {
+                    done(null);
+                }
+            });
+        }
+    });
+}
+
+GooglePage.prototype.clickFirstLink = function(el, done) {
+    el.click(function(err) {
+        if(err) {
+            done(err);
+        }
+        else {
+            done(null);
+        }
+    });
+}
+
 module.exports = GooglePage;

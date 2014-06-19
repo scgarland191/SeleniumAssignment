@@ -1,0 +1,197 @@
+var bootstrap = require('../bootstrap');
+var browser = bootstrap.browser;
+var log = bootstrap.log;
+var should = bootstrap.should;
+var expect = bootstrap.chai.expect;
+var assert = require('assert');
+
+var mobiquityPage = require('../pages/mobiquityPage');
+var mobiquity;
+var sessionid;
+var sessionurl;
+
+describe('Mobiquity Search - Basic Search', function() {
+    this.timeout(bootstrap.MaxWaittime); // To get the app open in the emulator
+
+    before(function(done) {
+        mobiquity = new mobiquityPage(browser);
+
+        log.info("About to run browser init with desired options: " + JSON.stringify(bootstrap.desired, null, 4));
+        bootstrap.desired.name="Mobiquity Search - Basic Search";
+
+        browser.init({browserName:'chrome'}).then(function(adb) {
+                log.info("Successfully initialized the browser.");
+                browser.getSessionId().then(function(sid) {
+                sessionid = sid;
+                sessionurl = "https://saucelabs.com/tests/" + sid;
+                bootstrap.writeToFile("Mobiquity Search - " + sessionurl);
+            });
+            return;
+        }).nodeify(done);
+    });
+
+    after(function(done) {
+        browser.quit().nodeify(done);
+    });
+
+    it('has an initial empty test for kicks', function(done) {
+        done();
+    });
+
+    describe('Mobiquity Testing', function() {
+        it('should display our page first', function(done) {
+            log.info("About to open mobiquity home page...");
+            browser.get("http://mobiquityinc.com", function(err) {
+                if(err) {
+                    log.error("Unable to get mobiquity home page: " + err);
+                    done(err);
+                }
+                else {
+                    log.info("Got Mobiquityinc.com home page!");
+                    done();
+                }
+            });
+        });
+        it('should verify the text for \'About\'', function(done) {
+            mobiquity.selectAndReturnText(mobiquity.aboutSelector, function(err, aboutText){
+                if (err){
+                    log.error("COULD NOT OBTAIN THE TEXT WITHIN \'ABOUT\'");
+                    done(err);
+                }
+                else {
+                    log.info("Aquired text: "+aboutText);
+                    try {
+                        assert.equal(aboutText, mobiquity.aboutText);
+                        done();
+                    }
+                    catch(err) {
+                        done(err);
+                    }
+                }
+            });
+        })
+        it('should verify the text for \'How\'', function(done) {
+            mobiquity.selectAndReturnText(mobiquity.howSelector, function(err, howText){
+                if (err){
+                    log.error("COULD NOT OBTAIN THE TEXT WITHIN \'HOW\'");
+                    done(err);
+                }
+                else {
+                    log.info("Aquired text: "+howText);
+                    try {
+                        assert.equal(howText, mobiquity.howText);
+                        done();
+                    }
+                    catch(err) {
+                        done(err);
+                    }
+                }
+            });
+        })
+        it('should verify the text for \'Portfolio\'', function(done) {
+            mobiquity.selectAndReturnText(mobiquity.portfolioSelector, function(err, portfolioText){
+                if (err){
+                    log.error("COULD NOT OBTAIN THE TEXT WITHIN \'PORTFOLIO\'");
+                    done(err);
+                }
+                else {
+                    log.info("Aquired text: "+portfolioText);
+                    try {
+                        assert.equal(portfolioText, mobiquity.portfolioText);
+                        done();
+                    }
+                    catch(err) {
+                        done(err);
+                    }
+                }
+            });
+        })
+        it('should verify the text for \'Slogan\'', function(done) {
+            mobiquity.selectAndReturnText(mobiquity.sloganSelector, function(err, sloganText){
+                if (err){
+                    log.error("COULD NOT OBTAIN THE TEXT WITHIN \'SLOGAN\'");
+                    done(err);
+                }
+                else {
+                    log.info("Aquired text: "+sloganText);
+                    try {
+                        assert.equal(sloganText, mobiquity.sloganText);
+                        done();
+                    }
+                    catch(err) {
+                        done(err);
+                    }
+                }
+            });
+        })
+        it('should verify the text for \'phone\'', function(done) {
+            mobiquity.selectAndReturnText(mobiquity.phoneSelector, function(err, phoneText){
+                if (err){
+                    log.error("COULD NOT OBTAIN THE TEXT WITHIN \'PHONE\'");
+                    done(err);
+                }
+                else {
+                    log.info("Aquired text: "+phoneText);
+                    try {
+                        assert.equal(phoneText, mobiquity.phoneText);
+                        done();
+                    }
+                    catch(err) {
+                        done(err);
+                    }
+                }
+            });
+        })
+        it('should click on the \'About\' link', function(done) {
+            log.info("About to run the link clicking functions...")
+            mobiquity.selectAndClick(mobiquity.aboutSelector, function(err) {
+                if(err) {
+                    log.error("Unable to click \'About\' anchor: " + err);
+                    done(err)
+                }
+                else {
+                    log.info("Click successful!");
+                    done();
+                }
+            });
+            // browser.back(function(err){
+            //     if (err) {
+            //         log.error("COULD NOT GO BACK!");
+            //         done(err);
+            //     }
+            //     else {
+            //         log.info("Successfully went back!");
+            //         done();
+            //     }
+            // });
+        });
+        // it('should have a title that matches'+mobiquityAbout.aboutTitleText, function(done) {
+        //     browser.title(function(err, titleText){
+        //         if(err) {
+        //             log.error("Unable to get the title: " + err);
+        //             done(err);
+        //         }
+        //         else {
+        //             log.info("Title obtained: "+titleText);
+        //             assert.equal(titleText, mobiquityAbout.aboutTitleText);
+        //             done();
+        //         }
+        //     });
+        // });
+        // it('should go back', function(done) {
+        //     log.info("Attempting to go back...");
+        //     browser.back(function(err){
+        //         if (err) {
+        //             log.error("COULD NOT GO BACK!");
+        //             done(err);
+        //         }
+        //         else {
+        //             log.info("Successfully went back!");
+        //             //done();
+        //         }
+        //     });
+        // });
+    })
+
+});
+
