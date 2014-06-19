@@ -6,24 +6,55 @@ var browser;
 // NOTE: No other customer page-specific names should be anywhere 
 //   but at the top of the file or the top of the page object
 
-var MobiquityPage = function(theBrowser) {
+var MobiquityAboutPage = function(theBrowser) {
     browser = theBrowser;
-    log.info("Mobiquity Page initialized");
+    log.info("Mobiquity About Page initialized");
 
     // Custom Exported values here
-    this.location = "http://mobiquityinc.com/";
-    this.mobiquityTitleText = 'Enterprise Mobile Apps, Strategy & Solutions | Mobiquity';
-    this.titleSelector = "head title";
-    this.aboutSelector = "a[href=\"/about\"]"
-    this.howSelector = "a[href=\"/how\"]"
-    this.portfolioSelector = "a[title=\"Portfolio\"]"
-    this.sloganSelector = "#section_front_tagline h2"
-    this.phoneSelector = "#footer_bottom_tel"
-    this.aboutText = "About"
-    this.howText = "How"
-    this.portfolioText = "Portfolio"
-    this.sloganText = "We make mobile simple. You make mobile matter."
-    this.phoneText = "T: +1 (781) 591 4800"
+    this.location = "http://mobiquityinc.com/about";
+    this.aboutTitleText = 'About | Mobiquity';
+    this.leadershipText = "Leadership"
+    this.leadershipSelector = "a[href=\"about/leadership\"]"
+
 };
 
-module.exports = MobiquityPage;
+MobiquityAboutPage.prototype.selectAndReturnText = function(selector, done) {
+    var self = this;
+    log.info("About to get element selector: "+selector);
+    
+    browser.waitForElementByCssSelector(selector, function(err, el) {
+        if(err) {
+            log.error("DID NOT SUCCESSFULLY USE THE SELECTOR");
+            done(err);
+        }
+        else {
+            log.info("Selector utilized, awaiting text...");
+            self.returnText(el, function (err, val){
+                if(err) {
+                    log.error("DID NOT START OBTAINING TEXT");
+                    done(err);
+                }
+                else {
+                    log.info("Text is being obtained...")
+                    done(null, val);
+                }
+            });
+        }
+    });
+}
+
+MobiquityAboutPage.prototype.returnText = function(el, done) {
+    el.getAttribute("innerHTML", function(err, val) {
+        if(err) {
+            log.error("COULD NOT OBTAIN TEXT FROM THE ELEMENT")
+            done(err);
+        }
+        else {
+            log.info("Element text obtained")
+            done(null, val);
+        }
+    });
+}
+
+
+module.exports = MobiquityAboutPage;

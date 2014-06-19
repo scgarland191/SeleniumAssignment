@@ -4,9 +4,12 @@ var log = bootstrap.log;
 var should = bootstrap.should;
 var expect = bootstrap.chai.expect;
 var assert = require('assert');
+var asserters = bootstrap.wd.asserters;
 
 var mobiquityPage = require('../pages/mobiquityPage');
+var mobiquityAboutPage = require('../pages/mobiquityAboutPage');
 var mobiquity;
+var mobiquityAbout;
 var sessionid;
 var sessionurl;
 
@@ -15,6 +18,7 @@ describe('Mobiquity Search - Basic Search', function() {
 
     before(function(done) {
         mobiquity = new mobiquityPage(browser);
+        mobiquityAbout = new mobiquityAboutPage(browser);
 
         log.info("About to run browser init with desired options: " + JSON.stringify(bootstrap.desired, null, 4));
         bootstrap.desired.name="Mobiquity Search - Basic Search";
@@ -142,7 +146,7 @@ describe('Mobiquity Search - Basic Search', function() {
                 }
             });
         })
-        it('should click on the \'About\' link', function(done) {
+        it('should click on the \'About\' link and return home', function(done) {
             log.info("About to run the link clicking functions...")
             mobiquity.selectAndClick(mobiquity.aboutSelector, function(err) {
                 if(err) {
@@ -151,21 +155,58 @@ describe('Mobiquity Search - Basic Search', function() {
                 }
                 else {
                     log.info("Click successful!");
-                    done();
+                    try {
+                        browser.waitFor(asserters.jsCondition('$("title") ? true : false'), bootstrap.MaxWaittime, function(err, status) {
+                            if (err) {
+                                log.error("COULD NOT LOAD ABOUT PAGE");
+                                done(err);
+                            }
+                            else {
+                                log.info("Page loaded successfully")
+                                done();
+                                // mobiquityAbout.selectAndReturnText(mobiquityAbout.leadershipSelector, function(err, leadershipText){
+                                //     if (err){
+                                //         log.error("COULD NOT OBTAIN THE TEXT WITHIN \'LEADERSHIP\'");
+                                //         done(err);
+                                //     }
+                                //     else {
+                                //         log.info("Aquired text: "+leadershipText);
+                                //         try {
+                                //             assert.equal(leadershipText, mobiquityAbout.leadershipText);
+                                //             browser.title(function(err, titleText){
+                                //                 if(err) {
+                                //                     log.error("UNABLE TO GET THE TITLE: " + err);
+                                //                     done(err);
+                                //                 }
+                                //                 else {
+                                //                     log.info("Title obtained: "+titleText);
+                                //                     try {
+                                //                         assert.equal(titleText, mobiquityAbout.aboutTitleText);
+                                //                         log.info("Title Matches!!!")
+                                //                         done();
+                                //                     }
+                                //                     catch(err) {
+                                //                         done(err);
+                                //                     }
+                                //                 }
+                                //             });
+                                //         }
+                                //         catch(err) {
+                                //             log.error("Syntax error in waitFor(): "+err)
+                                //             done();
+                                //         }
+                                //     }
+                                // });
+                            }
+                        });
+                    }
+                    catch(err) {
+                        done(err);
+                    }
                 }
             });
-            // browser.back(function(err){
-            //     if (err) {
-            //         log.error("COULD NOT GO BACK!");
-            //         done(err);
-            //     }
-            //     else {
-            //         log.info("Successfully went back!");
-            //         done();
-            //     }
-            // });
         });
-        // it('should have a title that matches'+mobiquityAbout.aboutTitleText, function(done) {
+        // xit('should have a title that matches'+mobiquityAbout.aboutTitleText, function(done) {
         //     browser.title(function(err, titleText){
         //         if(err) {
         //             log.error("Unable to get the title: " + err);
@@ -175,19 +216,6 @@ describe('Mobiquity Search - Basic Search', function() {
         //             log.info("Title obtained: "+titleText);
         //             assert.equal(titleText, mobiquityAbout.aboutTitleText);
         //             done();
-        //         }
-        //     });
-        // });
-        // it('should go back', function(done) {
-        //     log.info("Attempting to go back...");
-        //     browser.back(function(err){
-        //         if (err) {
-        //             log.error("COULD NOT GO BACK!");
-        //             done(err);
-        //         }
-        //         else {
-        //             log.info("Successfully went back!");
-        //             //done();
         //         }
         //     });
         // });

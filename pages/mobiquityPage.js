@@ -1,5 +1,5 @@
 var webdriver = require('wd');
-var log = require('custom-logger').config({ level: 0 }); // TODO: Change to 2 for sauce
+var log = require('custom-logger').config({ level: 1 }); // TODO: Change to 2 for sauce
 var browser;
 
 // Page Elements Here
